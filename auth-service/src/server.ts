@@ -16,8 +16,8 @@ app.use(cors({
 app.use(express.json());
 app.use("/api" , authRoute);
 
-app.get("/" , (_req: Request, res: Response) => {
-    res.send("Sever is runining")
+app.get("/test" , (_req: Request, res: Response) => {
+    res.status(200).json("Server is Running")
 })
 
 app.listen(+process.env.HTTP_PORT! , () => {

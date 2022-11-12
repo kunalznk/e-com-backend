@@ -1,7 +1,7 @@
 require('dotenv').config()
 import { createTransport } from 'nodemailer';
 
-const transport = createTransport({
+export const transport = createTransport({
     
     service:"gmail",
     auth:{

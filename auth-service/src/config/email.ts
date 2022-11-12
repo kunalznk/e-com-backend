@@ -1,3 +1,4 @@
+require('dotenv').config()
 import { createTransport } from 'nodemailer';
 
 const transport = createTransport({
@@ -5,6 +6,8 @@ const transport = createTransport({
     service:"gmail",
     auth:{
      
+            pass:process.env.PASS,
+            user:process.env.USER
     }
 })
 

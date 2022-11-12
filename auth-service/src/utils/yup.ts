@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const fistName = yup.string().required().min(5).max(100);
+const firstName = yup.string().required().min(5).max(100);
 const lastName = yup.string().required().min(5).max(100);
 const password = yup
   .string()
@@ -19,12 +19,14 @@ const emailId = yup
   .min(5)
   .max(100);
 
+const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/);
 
 export const CreateUserInputSchema = yup.object({
-  fistName,
+  firstName,
   lastName,
   emailId,
   password,
+  role
 });
 
 

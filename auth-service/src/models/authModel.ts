@@ -1,45 +1,66 @@
 import sequelize from "../config/db";
-import { DataTypes } from "sequelize"
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
 
-const Auth = sequelize.define('Auth', {
-    emailId: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    mobileNumber: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-    role: {
-      type: DataTypes.TINYINT,
-      allowNull:false
-    },
-    isVerified : {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull:true
-    },
-    otp : {
-        type: DataTypes.TINYINT,
-        allowNull:true
-    },
-    expiresAt : {
-        type: DataTypes.DATE,
-    },
-    createdAt: {
-        type: DataTypes.DATE,
-    },
-    updatedAt: {
-        type: DataTypes.DATE,
-    }
-  }, {
-    tableName: 'Auth',
-});
+export enum ROLE {
+  CUSTOMER = "CUSTOMER",
+  SELLER = "SELLER",
+  DELIVERY_PARTNER = "DELIVERY_PARTNER"
+}
+class Auth extends Model<InferAttributes<Auth>, InferCreationAttributes<Auth>>{
+  declare id: CreationOptional<number>;
+  declare emailId: string;
+  declare password: string;
+  declare phoneNumber: string;
+  declare role: ROLE;
+  declare otp: number;
+  declare isVerified: CreationOptional<boolean>;
+  declare expiresAt: string;
+  declare createdAt: CreationOptional<string>;
+  declare updatedAt: CreationOptional<string>;
+}
 
-
-export default Auth;
+export default Auth.init({
+  id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    primaryKey:true,
+    autoIncrement:true
+  },
+  emailId: {
+    type: DataTypes.STRING,
+    unique:true,
+    allowNull: false
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  phoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }, 
+  role: {
+    type: DataTypes.ENUM("CUSTOMER","SELLER","DELIVERY_PARTNER"),
+    allowNull: false
+  },
+  otp: {
+    type: DataTypes.INTEGER.UNSIGNED,
+  }, 
+  expiresAt: {
+    type: DataTypes.DATE
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue:false
+  },
+  createdAt:{
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt:{
+    type: DataTypes.DATE
+  }
+} , {
+  sequelize,
+  tableName: 'auths'
+  
+})

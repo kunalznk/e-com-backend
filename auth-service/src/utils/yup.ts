@@ -21,6 +21,8 @@ const emailId = yup
 
 const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/);
 
+const token = yup.string().required()
+
 export const CreateUserInputSchema = yup.object({
   firstName,
   lastName,
@@ -35,5 +37,22 @@ export const LoginInputSchema = yup.object({
   password,
 });
 
+export const ResetPasswordInputSchema = yup.object({
+  emailId,
+});
+
+export const VerifyEmailInputSchema = yup.object({
+  token,
+});
+
+export const UpdatePasswordInputSchema = yup.object({
+  token: yup.string().optional(),
+  password: yup.string().when('token', {
+    is: false,
+    then: yup.string().required("Please Provide Password"),
+    otherwise: yup.string().optional()
+  }),
+  newPassword: yup.string().required("Password dose not match")
+});
 
 

@@ -13,7 +13,7 @@ export const buildSuccessMessage = (resData : unknown) => {
   }
 }
 
-export const buildFailMessage = (e : Error) => {
+export const buildFailMessage = (e : Error | unknown) => {
   console.log("Error", e)
   let error;
   if(e instanceof ValidationError) {
@@ -36,11 +36,13 @@ export const buildFailMessage = (e : Error) => {
       path: e.errors[0]?.path,
       message: e.errors[0]?.message,
     }
+  } else {
+    error =  e;
   }
   return {
        data : { 
         status : "FAIL",
-        message : e.name,
+        message : e?.name,
         error
     } ,
     statusCode : 200
@@ -50,97 +52,433 @@ export const buildFailMessage = (e : Error) => {
 export const verifyEmailTemplate = (token : string) => {
 
     const verfiyUrl = `http://localhost:3000/api/v1/verifyEmail/${token}`
-    return `<table role="presentation" style="width: 100%; margin: 0px; padding: 10px 0px 0px; background-color: rgb(242, 244, 246); --darkreader-inline-bgcolor: #1e2122;" data-darkreader-inline-bgcolor="" width="100%" cellspacing="0" cellpadding="0">
+    return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
     <tbody><tr>
-      <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px" align="center">
-        <table role="presentation" style="width:100%;margin:0;padding:0" width="100%" cellspacing="0" cellpadding="0">
-          <tbody><tr>
-            <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px;height:25px;width:570px;margin:0 auto">
-              <table class="m_8472533597368497227email-body_inner" role="presentation" style="width: 570px; margin: 0px auto; padding: 10px 15px; background: rgb(0, 0, 0); --darkreader-inline-bgcolor: #000000; --darkreader-inline-bgimage: none;" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" width="570" cellspacing="0" cellpadding="0" align="center">
-                <tbody><tr>
-                  <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px">
-                    <a href="https://codepen.io" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://codepen.io&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw27oXmdG5uI9E5J5Pn2qEu8" data-darkreader-inline-color="">
-                      <img src="https://ci5.googleusercontent.com/proxy/nybv9hWkgvLh_Xvmcohv9ep_0fQtvAnKNb96DFYClnaMEc-JRGXEHUZijZB4d0-MJ3X_YlZlF3goQ7CTVKIISLnbU1FUjEccZZAqkVBvLvqXTwAHSqagSTw1LUiR-XdDtDBHC35KOpczhJB7rFLV=s0-d-e1-ft#https://res.cloudinary.com/css-tricks/image/upload/f_auto,q_auto/v1583434037/logo_mz4myz.png" alt="CodePen" style="border: medium none; vertical-align: middle; width: 120px; height: auto; --darkreader-inline-border-top: currentcolor; --darkreader-inline-border-right: currentcolor; --darkreader-inline-border-bottom: currentcolor; --darkreader-inline-border-left: currentcolor;" class="CToWUd" data-bit="iit" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="">
-                    </a>
-                  </td>
-                </tr>
-              </tbody></table>
-            </td>
-          </tr>
-          
-          
-          <tr>
-            <td cellpadding="0" cellspacing="0" style="font-family:Lato,Tahoma,sans-serif;font-size:16px;width:100%;margin:0;padding:0" width="570">
-              <table class="m_8472533597368497227email-body_inner" role="presentation" style="width: 570px; margin: 0px auto; padding: 0px; background-color: rgb(255, 255, 255); --darkreader-inline-bgcolor: #181a1b;" data-darkreader-inline-bgcolor="" width="570" cellspacing="0" cellpadding="0" align="center">
+        <td class="m_2915170658117276425r3-c" align="center">
+            <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
                 
-                
-                <tbody><tr>
-                  <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px;padding:20px 45px">
-                    <div>
-                      <h1 style="margin-top: 0px; color: rgb(51, 51, 51); font-size: 24px; font-weight: bold; text-align: left; --darkreader-inline-color: #c8c3bc;" data-darkreader-inline-color="">
-Thanks for signing up for CodePen!
-</h1>
-
-<p style="color: rgb(81, 84, 94); margin: 0.4em 0px 1.1875em; font-size: 16px; line-height: 1.625; --darkreader-inline-color: #b1aaa0;" data-darkreader-inline-color="">
-We're happy you're <span class="il">here</span>. Let's get your <span class="il">email</span> address verified:
-</p>
-
-<p style="color: rgb(81, 84, 94); margin: 0.4em 0px 1.1875em; font-size: 16px; line-height: 1.625; --darkreader-inline-color: #b1aaa0;" data-darkreader-inline-color="">
-<a href=${verfiyUrl} style="color: rgb(255, 255, 255); background-color: rgb(56, 105, 212); border-color: rgb(56, 105, 212); border-style: solid; border-width: 10px 18px; display: inline-block; text-decoration: none; border-radius: 3px; box-sizing: border-box; --darkreader-inline-color: #e8e6e3; --darkreader-inline-bgcolor: #234ba1; --darkreader-inline-border-top: #1f4290; --darkreader-inline-border-right: #1f4290; --darkreader-inline-border-bottom: #1f4290; --darkreader-inline-border-left: #1f4290;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://codepen.io/kunalznk/verify/email/Zz8Z97?user_id%3D8775364&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw1PGKra0WqE6zkIYuBbvHzq" data-darkreader-inline-color="" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><span class="il">Click</span> to <span class="il">Verify</span> <span class="il">Email</span></a>
-</p>
-
-<p style="color: rgb(81, 84, 94); margin: 0.4em 0px 1.1875em; font-size: 16px; line-height: 1.625; --darkreader-inline-color: #b1aaa0;" data-darkreader-inline-color="">Verifying your <span class="il">email</span> address enables these features:</p>
-
-<ul style="margin:0.4em 0 1.1875em;font-size:16px;line-height:1.625">
-<li><a href="http://blog.codepen.io/documentation/views/full-page-view/" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://blog.codepen.io/documentation/views/full-page-view/&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw32pAjsh6Zhu_tOddd-z2I7" data-darkreader-inline-color="">Full Page View</a></li>
-<li><a href="https://blog.codepen.io/documentation/features/collections/" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://blog.codepen.io/documentation/features/collections/&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw0xASOrH939IgZ75kdy7Iy_" data-darkreader-inline-color="">Collections</a></li>
-<li>Commenting on Pens and Projects</li>
-<li>Your Pens are searchable on CodePen</li>
-</ul>
-
-
-<h2 style="margin-top: 0px; color: rgb(51, 51, 51); font-size: 20px; font-weight: bold; text-align: left; --darkreader-inline-color: #c8c3bc;" data-darkreader-inline-color="">
-Getting Started on CodePen
-</h2>
-
-<p style="color: rgb(81, 84, 94); margin: 0.4em 0px 1.1875em; font-size: 16px; line-height: 1.625; --darkreader-inline-color: #b1aaa0;" data-darkreader-inline-color="">
-Ready to get coding? <span class="il">Here</span> are a few links to help you!
-</p>
-
-<ul style="margin:0.4em 0 1.1875em;font-size:16px;line-height:1.625">
-<li><a href="https://codepen.io/hello" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://codepen.io/hello&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw2Y6Owiz6-tOA9tBN7aV1Hh" data-darkreader-inline-color="">Quick overview of what you can do with CodePen</a></li>
-<li><a href="https://codepen.io/pen/tour/welcome/start" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://codepen.io/pen/tour/welcome/start&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw1NmkuIIiKKymTnbD1qWZS9" data-darkreader-inline-color="">Take a guided tour through the Pen editor</a></li>
-</ul>
-
-
-                    </div>
-                  </td>
+                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                    <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
                 </tr>
-                
-              </tbody></table>
-            </td>
-          </tr>
-          <tr>
-            <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px">
-              <table class="m_8472533597368497227email-footer" role="presentation" style="width:570px;margin:0 auto;padding:0;text-align:center" width="570" cellspacing="0" cellpadding="0" align="center">
-                <tbody><tr>
-                  <td style="font-family:Lato,Tahoma,sans-serif;font-size:16px;padding:20px 45px" align="center">
-                    <p style="color: rgb(111, 112, 115); margin: 0.4em 0px 1.1875em; font-size: 13px; line-height: 1.625; text-align: center; --darkreader-inline-color: #a1988c;" data-darkreader-inline-color="">
-                      
-                      
-
-                      Need help with anything?
-                      Hit up <a href="https://codepen.io/support" style="color: rgb(56, 105, 212); --darkreader-inline-color: #4a8ed8;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://codepen.io/support&amp;source=gmail&amp;ust=1668238999271000&amp;usg=AOvVaw0kQK07VQtJ5OGf8vo3Hc08" data-darkreader-inline-color="">support</a>.
-          
-                    </p>
-                  </td>
+                <tr>
+                    <td class="m_2915170658117276425r5-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tbody><tr>
+                                <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                    <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        
+                                        <tbody><tr>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                            <td class="m_2915170658117276425r8-i" valign="top">
+                                                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                    <tbody><tr>
+                                                        <td class="m_2915170658117276425r9-c" align="center">
+                                                            <table role="presentation" class="m_2915170658117276425r10-o" style="table-layout:fixed;width:285px" width="285" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r11-i" style="font-size:0px;line-height:0px"> <img src="https://ci6.googleusercontent.com/proxy/eh8Dka3qrjhwqiVBNko2haJH2BOHjhKJ6rUwUZ4SRPLA7BUE9ynEnFCw_dNBOoQijw7vOqlyLtKkEptMa7OTHGhFNEzhMMst6Qov9jxYU7BmexMfJSD64FIn_NXk7llFvdrgJjmfJcNfkUhVPa3mP5_2=s0-d-e1-ft#https://img.mailinblue.com/3579920/images/content_library/original/620b8836d79b114a07097f02.png" style="display:block;width:100%" class="CToWUd" data-bit="iit" width="285" border="0"></td>
+                                                                </tr>
+                                                                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                        </tr>
+                                    </tbody></table>
+                                </th>
+                            </tr>
+                        </tbody></table>
+                    </td>
                 </tr>
-              </tbody></table>
-            </td>
-          </tr>
-        </tbody></table>
-      </td>
+                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                    <td style="font-size: 10px; line-height: 10px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="10">­</td>
+                </tr>
+            </tbody></table>
+        </td>
     </tr>
-  </tbody></table>
-    `
+    <tr>
+        <td class="m_2915170658117276425r3-c" align="center">
+            <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                
+                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                    <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
+                </tr>
+                <tr>
+                    <td class="m_2915170658117276425r12-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tbody><tr>
+                                <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                    <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        
+                                        <tbody><tr>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                            <td class="m_2915170658117276425r8-i" valign="top">
+                                                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                    <tbody><tr>
+                                                        <td class="m_2915170658117276425r13-c" align="left">
+                                                            <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r15-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                        <div>
+                                                                            <h1 style="color: rgb(159, 239, 0); font-family: arial, helvetica, sans-serif; font-size: 36px; margin: 0px; --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color=""><span style="font-size:28px"><span class="il">Verify</span> <span class="il">your</span> email <img data-emoji="📩" class="an1" alt="📩" aria-label="📩" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f4e9/32.png" loading="lazy"></span></h1>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                        </tr>
+                                    </tbody></table>
+                                </th>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+    <tr>
+        <td class="m_2915170658117276425r3-c" align="center">
+            <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                
+                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                    <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
+                </tr>
+                <tr>
+                    <td class="m_2915170658117276425r12-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tbody><tr>
+                                <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                    <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        
+                                        <tbody><tr>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="10">­ </td>
+                                            <td class="m_2915170658117276425r8-i" valign="top">
+                                                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                    <tbody><tr>
+                                                        <td class="m_2915170658117276425r13-c" align="left">
+                                                            <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                        <div>
+                                                                            <p style="margin:0px">Please click the button below to <span class="il">verify</span> <span class="il">your</span> e-mail address.</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="m_2915170658117276425r3-c" align="center">
+                                                            <table role="presentation" class="m_2915170658117276425r17-o" style="table-layout:fixed;width:290px" width="290" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r18-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" height="18" align="center">
+                                                                          
+                                                                        <a href=${verfiyUrl} class="m_2915170658117276425r19-r" style="font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; background-color: rgb(159, 239, 0); border-color: rgb(159, 239, 0); border-radius: 4px; border-width: 0px; color: rgb(17, 25, 39); font-family: arial, helvetica, sans-serif; font-size: 16px; height: 18px; padding: 12px 5px; width: 280px; --darkreader-inline-bgcolor: #7fbf00; --darkreader-inline-border-top: #7ab700; --darkreader-inline-border-right: #7ab700; --darkreader-inline-border-bottom: #7ab700; --darkreader-inline-border-left: #7ab700; --darkreader-inline-color: #d6d3cd;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://academy.hackthebox.com/email/verify/553181/5d8fe72645526e875e7c28d320d6f6b60914b93e?expires%3D1658427606%26signature%3D84faafcaaa22ece153d5940d9185c5c169f7120b4f0822619cde12edb6b575b5&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw2cUHGCf9wzkJu6s087PBAW" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="" data-darkreader-inline-color="">
+                                                                            <p style="margin:0px"><span class="il">Verify</span> Email Adress</p>
+                                                                        </a>
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="m_2915170658117276425r13-c" align="left">
+                                                            <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                        <div>
+                                                                            <p style="margin:0px">If you did not create an <span class="il">account</span>, no further action is required.</p>
+                                                                            <p style="margin:0px"> </p>
+                                                                            <p style="margin:0px">If you're having trouble clicking the "<span class="il">Verify</span> Email Address" button, copy and paste the URL below into <span class="il">your</span> web browser:</p>
+                                                                            <p style="margin:0px"> </p>
+                                                                            <p style="margin:0px"><a href=${verfiyUrl} target="_blank" data-saferedirecturl=${verfiyUrl}>${verfiyUrl}</a></p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="m_2915170658117276425r13-c" align="left">
+                                                            <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                        <div>
+                                                                            <p style="margin:0px"><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">Also, don't forget to join the <img data-emoji="💚" class="an1" alt="💚" aria-label="💚" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f49a/32.png" loading="lazy"> of our community: our</span><span style="color: rgb(133, 133, 136); --darkreader-inline-color: #9c9386;" data-darkreader-inline-color=""> </span><a href="https://discord.com/invite/hackthebox?utm_source=sendinblue&amp;utm_campaign=Academy%20Email%20Verification%20Revamp&amp;utm_medium=email" style="color: rgb(159, 239, 0); font-weight: normal; text-decoration: none; --darkreader-inline-color: #b6ff25;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://discord.com/invite/hackthebox?utm_source%3Dsendinblue%26utm_campaign%3DAcademy%2520Email%2520Verification%2520Revamp%26utm_medium%3Demail&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw2BTvJMSD6Ntr0mWtxoKPf7" data-darkreader-inline-color=""><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">Discord server</span></a><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">!</span></p>
+                                                                            <p style="margin:0px"><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">If you experience any problem, make sure to check our </span><a href="https://help.hackthebox.com/en/?utm_source=sendinblue&amp;utm_campaign=Academy%20Email%20Verification%20Revamp&amp;utm_medium=email" style="color: rgb(159, 239, 0); font-weight: normal; text-decoration: none; --darkreader-inline-color: #b6ff25;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://help.hackthebox.com/en/?utm_source%3Dsendinblue%26utm_campaign%3DAcademy%2520Email%2520Verification%2520Revamp%26utm_medium%3Demail&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw0mE6scoWar6VXHlCFcP8bj" data-darkreader-inline-color=""><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">Knowledge Base</span></a><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">.</span></p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                    <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                            <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="10">­ </td>
+                                        </tr>
+                                    </tbody></table>
+                                </th>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody></table>`
+}
+
+export const ResetPasswordEmailTemplate = (token : string) => {
+
+    const resetPassowrdUrl = `http://localhost:3000/api/v1/resetpassword/${token}`
+  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+      <td class="m_2915170658117276425r3-c" align="center">
+          <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+              
+              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                  <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
+              </tr>
+              <tr>
+                  <td class="m_2915170658117276425r5-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                          <tbody><tr>
+                              <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                  <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                      
+                                      <tbody><tr>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                          <td class="m_2915170658117276425r8-i" valign="top">
+                                              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                  <tbody><tr>
+                                                      <td class="m_2915170658117276425r9-c" align="center">
+                                                          <table role="presentation" class="m_2915170658117276425r10-o" style="table-layout:fixed;width:285px" width="285" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r11-i" style="font-size:0px;line-height:0px"> <img src="https://ci6.googleusercontent.com/proxy/eh8Dka3qrjhwqiVBNko2haJH2BOHjhKJ6rUwUZ4SRPLA7BUE9ynEnFCw_dNBOoQijw7vOqlyLtKkEptMa7OTHGhFNEzhMMst6Qov9jxYU7BmexMfJSD64FIn_NXk7llFvdrgJjmfJcNfkUhVPa3mP5_2=s0-d-e1-ft#https://img.mailinblue.com/3579920/images/content_library/original/620b8836d79b114a07097f02.png" style="display:block;width:100%" class="CToWUd" data-bit="iit" width="285" border="0"></td>
+                                                              </tr>
+                                                              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                              </tbody></table>
+                                          </td>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                      </tr>
+                                  </tbody></table>
+                              </th>
+                          </tr>
+                      </tbody></table>
+                  </td>
+              </tr>
+              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                  <td style="font-size: 10px; line-height: 10px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="10">­</td>
+              </tr>
+          </tbody></table>
+      </td>
+  </tr>
+  <tr>
+      <td class="m_2915170658117276425r3-c" align="center">
+          <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+              
+              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                  <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
+              </tr>
+              <tr>
+                  <td class="m_2915170658117276425r12-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                          <tbody><tr>
+                              <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                  <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                      
+                                      <tbody><tr>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                          <td class="m_2915170658117276425r8-i" valign="top">
+                                              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                  <tbody><tr>
+                                                      <td class="m_2915170658117276425r13-c" align="left">
+                                                          <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r15-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                      <div>
+                                                                          <h1 style="color: rgb(159, 239, 0); font-family: arial, helvetica, sans-serif; font-size: 36px; margin: 0px; --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color=""><span style="font-size:28px"><span class="il">Reset</span> <span class="il">your</span> password <img data-emoji="📩" class="an1" alt="📩" aria-label="📩" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f4e9/32.png" loading="lazy"></span></h1>
+                                                                      </div>
+                                                                  </td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                              </tbody></table>
+                                          </td>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="15">­ </td>
+                                      </tr>
+                                  </tbody></table>
+                              </th>
+                          </tr>
+                      </tbody></table>
+                  </td>
+              </tr>
+          </tbody></table>
+      </td>
+  </tr>
+  <tr>
+      <td class="m_2915170658117276425r3-c" align="center">
+          <table role="presentation" class="m_2915170658117276425r4-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+              
+              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                  <td style="font-size: 20px; line-height: 20px; background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="" height="20">­</td>
+              </tr>
+              <tr>
+                  <td class="m_2915170658117276425r12-i" style="background-color: rgb(17, 25, 39); --darkreader-inline-bgcolor: #0e141f;" data-darkreader-inline-bgcolor="">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                          <tbody><tr>
+                              <th class="m_2915170658117276425r6-c" width="100%" valign="top">
+                                  <table role="presentation" class="m_2915170658117276425r7-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                      
+                                      <tbody><tr>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="10">­ </td>
+                                          <td class="m_2915170658117276425r8-i" valign="top">
+                                              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                  <tbody><tr>
+                                                      <td class="m_2915170658117276425r13-c" align="left">
+                                                          <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                      <div>
+                                                                          <p style="margin:0px">Please click the button below to <span class="il">reset</span> <span class="il">your</span> password</p>
+                                                                      </div>
+                                                                  </td>
+                                                              </tr>
+                                                              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td class="m_2915170658117276425r3-c" align="center">
+                                                          <table role="presentation" class="m_2915170658117276425r17-o" style="table-layout:fixed;width:290px" width="290" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r18-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" height="18" align="center">
+                                                                        
+                                                                      <a href=${resetPassowrdUrl} class="m_2915170658117276425r19-r" style="font-weight: normal; line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; background-color: rgb(159, 239, 0); border-color: rgb(159, 239, 0); border-radius: 4px; border-width: 0px; color: rgb(17, 25, 39); font-family: arial, helvetica, sans-serif; font-size: 16px; height: 18px; padding: 12px 5px; width: 280px; --darkreader-inline-bgcolor: #7fbf00; --darkreader-inline-border-top: #7ab700; --darkreader-inline-border-right: #7ab700; --darkreader-inline-border-bottom: #7ab700; --darkreader-inline-border-left: #7ab700; --darkreader-inline-color: #d6d3cd;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://academy.hackthebox.com/email/verify/553181/5d8fe72645526e875e7c28d320d6f6b60914b93e?expires%3D1658427606%26signature%3D84faafcaaa22ece153d5940d9185c5c169f7120b4f0822619cde12edb6b575b5&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw2cUHGCf9wzkJu6s087PBAW" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="" data-darkreader-inline-color="">
+                                                                          <p style="margin:0px"><span class="il">Reset</span> Password</p>
+                                                                      </a>
+                                                                      
+                                                                  </td>
+                                                              </tr>
+                                                              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td class="m_2915170658117276425r13-c" align="left">
+                                                          <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                      <div>
+                                                                          <p style="margin:0px">If you did not create an <span class="il">account</span>, no further action is required.</p>
+                                                                          <p style="margin:0px"> </p>
+                                                                          <p style="margin:0px">If you're having trouble clicking the "<span class="il">Reset</span> Password" button, copy and paste the URL below into <span class="il">your</span> web browser:</p>
+                                                                          <p style="margin:0px"> </p>
+                                                                          <p style="margin:0px"><a href=${resetPassowrdUrl} target="_blank" data-saferedirecturl=${resetPassowrdUrl}>${resetPassowrdUrl}</a></p>
+                                                                      </div>
+                                                                  </td>
+                                                              </tr>
+                                                              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td class="m_2915170658117276425r13-c" align="left">
+                                                          <table role="presentation" class="m_2915170658117276425r14-o" style="table-layout:fixed;width:100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                              <tbody><tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td class="m_2915170658117276425r16-i" style="color: rgb(164, 177, 205); font-family: arial, helvetica, sans-serif; font-size: 16px; line-height: 1.7; text-align: center; --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="" valign="top" align="center">
+                                                                      <div>
+                                                                          <p style="margin:0px"><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">Also, don't forget to join the <img data-emoji="💚" class="an1" alt="💚" aria-label="💚" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f49a/32.png" loading="lazy"> of our community: our</span><span style="color: rgb(133, 133, 136); --darkreader-inline-color: #9c9386;" data-darkreader-inline-color=""> </span><a href="https://discord.com/invite/hackthebox?utm_source=sendinblue&amp;utm_campaign=Academy%20Email%20Verification%20Revamp&amp;utm_medium=email" style="color: rgb(159, 239, 0); font-weight: normal; text-decoration: none; --darkreader-inline-color: #b6ff25;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://discord.com/invite/hackthebox?utm_source%3Dsendinblue%26utm_campaign%3DAcademy%2520Email%2520Verification%2520Revamp%26utm_medium%3Demail&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw2BTvJMSD6Ntr0mWtxoKPf7" data-darkreader-inline-color=""><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">Discord server</span></a><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">!</span></p>
+                                                                          <p style="margin:0px"><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">If you experience any problem, make sure to check our </span><a href="https://help.hackthebox.com/en/?utm_source=sendinblue&amp;utm_campaign=Academy%20Email%20Verification%20Revamp&amp;utm_medium=email" style="color: rgb(159, 239, 0); font-weight: normal; text-decoration: none; --darkreader-inline-color: #b6ff25;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://help.hackthebox.com/en/?utm_source%3Dsendinblue%26utm_campaign%3DAcademy%2520Email%2520Verification%2520Revamp%26utm_medium%3Demail&amp;source=gmail&amp;ust=1668401904275000&amp;usg=AOvVaw0mE6scoWar6VXHlCFcP8bj" data-darkreader-inline-color=""><span style="color: rgb(159, 239, 0); --darkreader-inline-color: #b6ff25;" data-darkreader-inline-color="">Knowledge Base</span></a><span style="color: rgb(164, 177, 205); --darkreader-inline-color: #9eb3ca;" data-darkreader-inline-color="">.</span></p>
+                                                                      </div>
+                                                                  </td>
+                                                              </tr>
+                                                              <tr class="m_2915170658117276425nl2go-responsive-hide">
+                                                                  <td style="font-size:15px;line-height:15px" height="15">­</td>
+                                                              </tr>
+                                                          </tbody></table>
+                                                      </td>
+                                                  </tr>
+                                              </tbody></table>
+                                          </td>
+                                          <td class="m_2915170658117276425nl2go-responsive-hide" style="font-size:0px;line-height:1px" width="10">­ </td>
+                                      </tr>
+                                  </tbody></table>
+                              </th>
+                          </tr>
+                      </tbody></table>
+                  </td>
+              </tr>
+          </tbody></table>
+      </td>
+  </tr>
+</tbody></table>`
 }

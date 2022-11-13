@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { signIn, signUp } from "../controllers/authController";
+import { signIn, signUp, resetpassword, verifyEmail, resendVerifyEmail, updatePassword} from "../controllers/authController";
 
 const authRoute = Router();
 
 
 authRoute.post("/signup" , signUp);
 authRoute.post("/signin" , signIn)
-authRoute.post("/resetpassword")
-authRoute.post("/updatepassword")
-authRoute.post("/verifyemail/:token")
-authRoute.post("/verifyemail/resend")
+authRoute.post("/resetpassword", resetpassword)
+authRoute.patch("/updatepassword", updatePassword)
+authRoute.post("/verifyemail/:token", verifyEmail)
+authRoute.post("/verifyemail/resend", resendVerifyEmail)
 
 
 export default authRoute;

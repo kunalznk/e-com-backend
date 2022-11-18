@@ -19,7 +19,7 @@ const emailId = yup
   .min(5)
   .max(100);
 
-const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/);
+const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/).required("Plaese select role");
 
 const token = yup.string().required()
 

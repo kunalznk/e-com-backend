@@ -12,12 +12,14 @@ import CONSTANTS from '../utils/constants'
 
 import { sendMail } from './../config/email';
 import { buildFailMessage, buildSuccessMessage, ResetPasswordEmailTemplate, verifyEmailTemplate } from './../utils/common';
+import { createUserCreateEvent } from '../producer/auth';
+import { producer } from '../config/kafka';
 
 export const signUp = async (req: Request, res: Response , )  => {
 
     try {
         await CreateUserInputSchema.validate(req.body);
-        const { emailId , password , phoneNumber , role } = req.body;
+        const { emailId , password , phoneNumber , role , firstName , lastName} = req.body;
         const expiresAt = (Date.now() + 60000 * 10) as unknown as string;
         const otp = +randomstring.generate({
             charset:"1234567890",
@@ -42,6 +44,7 @@ export const signUp = async (req: Request, res: Response , )  => {
         }
         const html = verifyEmailTemplate(token)
         sendMail(emailId, html , "Verify Your Account");
+        createUserCreateEvent(producer, {...auth.toJSON(), firstName, lastName});
         const { data , statusCode } = buildSuccessMessage(auth);
         res.status(statusCode).json(data);
 

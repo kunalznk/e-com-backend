@@ -40,11 +40,10 @@ export const CreateUserSchema = yup.object({
 });
 
 export const updateUserSchema = yup.object({
-    firstName,
-    lastName,
-    role,
-    address,
-});
+    firstName: firstName.optional(),
+    lastName: lastName.optional(),
+    address: address.optional(),
+}).required("Please select min one value");
 
 
 

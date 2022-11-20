@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-service-depl
+spec:
+  selector:
+    matchLabels:
+      service-z: zookepper
+      service-k: kafka
+  template:
+    metadata:
+      labels:
+        service-z: zookepper
+    spec:
+      containers:
+      - name: zookepper-service-pod
+        image: kunalznk/e-com-auth
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4000
+        env:
+          - name: HTTP_PORT
+            value: "4000"
+          - name: HTTPS_PORT
+            value: "443"
+          - name: MYSQL_USER
+            value: "kunal"
+          - name: MYSQL_HOST
+            value: mysql-cluster-ip-service
+          - name: MYSQL_PASSWORD
+            value: "root@123"
+          - name: DATABASE
+            value: "auth"  
+          - name: DB_DIALECT
+            value: mysql
+          - name: PASS
+            value: jueooidnjszkqwaj
+          - name: USER
+            value: kunalznk@gmail.com    
+

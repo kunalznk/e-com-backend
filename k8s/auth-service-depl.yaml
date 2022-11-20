@@ -36,8 +36,9 @@ spec:
           - name: DB_DIALECT
             value: mysql
           - name: PASS
-            value: jueooidnjszkqwaj
+            value: ""
           - name: USER
-            value: kunalznk@gmail.com
+            value: ""
           - name: JWT_SECRET_KEY
+            value: ""  
 

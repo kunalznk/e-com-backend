@@ -1,12 +1,14 @@
 import { Request , Response } from "express"
 import  {UserModel as User , buildUser} from "../models/userModel"
+import { deleteUserEvent, updateUserEvent } from "../producer/user";
+import { producer } from "../config/kafka"
 import { buildFailMessage, buildSuccessMessage } from "../utils/common";
 import { updateUserSchema } from "../utils/yup";
 
 const currentUser = async (req: Request, res:Response) => {
     try {
         // const user = req.body;
-        const id = 2;
+        const id = req.user?.id;
         const user = await User.findById(id);
         const { data , statusCode } = buildSuccessMessage(user);
         res.status(statusCode).json(data);
@@ -19,7 +21,7 @@ const currentUser = async (req: Request, res:Response) => {
 const updateUser = async (req: Request, res:Response) => {
     try {
         await updateUserSchema.validate(req.body)
-        const id = 1;
+        const id = req.user?.id;
         const { firstName, lastName, address } = req.body;
         const user = await User.findOneAndUpdate({
             _id: id 
@@ -32,6 +34,7 @@ const updateUser = async (req: Request, res:Response) => {
             
         })
         const { data , statusCode } = buildSuccessMessage(user);
+        updateUserEvent(producer, user?.toJSON())
         res.status(statusCode).json(data);
     } catch (error) {
         const {data , statusCode } = buildFailMessage(error);
@@ -46,11 +49,12 @@ const deleteUser = async (req: Request, res:Response) => {
         // onThatEvent delete all data related to that user
         // send res
         // const param = req.params;
-        const id = 2;
-        await User.deleteOne({
-            _id: id
-        })
+        const id = req.user?.id;
+        await User.findByIdAndDelete(
+            id
+        )
         const { data , statusCode } = buildSuccessMessage([]);
+        deleteUserEvent(producer, id);
         res.status(statusCode).json(data);
     } catch (error) {
         const {data , statusCode } = buildFailMessage(error);

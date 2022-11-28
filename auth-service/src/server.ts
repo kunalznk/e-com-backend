@@ -3,12 +3,25 @@ import cors from "cors"
 
 import authRoute from "./routes/authRoutes";
 import sequelize from "./config/db";
+import { consumer, producer } from "./config/kafka";
+import { runUserCosunmer } from "./consumer/user";
 const app = express();
 
 sequelize.sync({
     force: false
 });
 
+producer.connect().then(() => {
+    console.log("Produce Connected")
+}).catch((e) => {
+    console.log("Cant connect due to" , {e})
+})
+
+runUserCosunmer(consumer).then(() => {
+    console.log("Consumer Connected")
+}).catch((e) => {
+    console.log("Cant connect due to" , {e})
+})
 app.use(cors({
     origin:"*"
 }))

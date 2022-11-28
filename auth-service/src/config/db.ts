@@ -5,7 +5,8 @@ const { DATABASE, MYSQL_USER, MYSQL_PASSWORD , MYSQL_HOST, DB_DIALECT} = process
 
 const sequelize = new Sequelize(DATABASE!, MYSQL_USER!, MYSQL_PASSWORD, {
     host: MYSQL_HOST,
-    dialect: 'mysql' ?? DB_DIALECT 
+    dialect: 'mysql' ?? DB_DIALECT,
+    logging: false
   });
 
 

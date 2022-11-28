@@ -1,5 +1,5 @@
 import sequelize from "../config/db";
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize"
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, UUIDV4 } from "sequelize"
 
 export enum ROLE {
   CUSTOMER = "CUSTOMER",
@@ -21,9 +21,9 @@ class Auth extends Model<InferAttributes<Auth>, InferCreationAttributes<Auth>>{
 
 export default Auth.init({
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    primaryKey:true,
-    autoIncrement:true
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
   emailId: {
     type: DataTypes.STRING,

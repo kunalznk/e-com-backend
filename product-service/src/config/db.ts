@@ -12,13 +12,17 @@ const mongo = mongoose.connect(mongoUrl ,  {
     console.log("connected")
 });
 
-// let mongo : Connection | undefined
+
+// let mongo : mongodb.MongoClient | undefined
 // (async () => {
 //     try {
-//         mongo = await mongoose.createConnection(mongoUrl , {
+//         const mongoInstance = await mongoose.createConnection(mongoUrl , {
 //             dbName: DATABASE,
 //             autoIndex: true,
 //         }).asPromise();
+        
+//         mongo = await mongoInstance?.getClient().connect()
+//         console.log("Connected to db")
         
 //     } catch (error) {
 //         console.log(error)

@@ -17,6 +17,8 @@ const userAddr = new Schema<UserAddress>({
     isDefault: { type: Boolean , default:false },
     pinCode:{ type: String , required: true },
     state:{ type: String , required: true }
+
+
 })
 
 const userSchema = new Schema<User>({

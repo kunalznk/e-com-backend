@@ -9,26 +9,8 @@ const mongo = mongoose.connect(mongoUrl ,  {
     autoCreate:true,
     dbName:DATABASE,
 }, ()=> {
-    console.log("connected")
+    console.log("MongoDB connected")
 });
 
-
-// let mongo : mongodb.MongoClient | undefined
-// (async () => {
-//     try {
-//         const mongoInstance = await mongoose.createConnection(mongoUrl , {
-//             dbName: DATABASE,
-//             autoIndex: true,
-//         }).asPromise();
-        
-//         mongo = await mongoInstance?.getClient().connect()
-//         console.log("Connected to db")
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-    
-    
-// }) ()
 
 export default mongo

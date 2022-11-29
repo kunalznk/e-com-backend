@@ -57,7 +57,7 @@ const images = yup.array().of(yup.string()).min(1);
 const avgRating = yup.number().min(1).max(5).optional()
 const variant = yup.object().optional();
 const isDiscounted = yup.number().required("Please Enter valid product discount").min(0).max(100);
-const sellerId = yup.number().required("Please Enter valid product seller");
+const sellerId = yup.string().required("Please Enter valid product seller");
 
 export const addProductSchema = yup.object({
   title,

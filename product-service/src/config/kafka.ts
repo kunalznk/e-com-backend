@@ -23,3 +23,16 @@ export const consumer: Consumer = kafka.consumer({
     }
 })
 
+export const orderConsumer: Consumer = kafka.consumer({
+    groupId: kafkaTopics.ORDER_TOPIC.ORDER_ADDED+"_GRP_"+1,
+    retry:{
+        retries: 10
+    }
+})
+
+export const paymentConsumer: Consumer = kafka.consumer({
+    groupId: kafkaTopics.PAYMENT_TOPIC.PAYMENT_ADDED+"_GRP_"+1,
+    retry:{
+        retries: 10
+    }
+})

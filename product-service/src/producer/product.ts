@@ -28,14 +28,14 @@ const productUpdatedEvent = async (product) => {
 
 }
 
-const productDeletedEvent = async (product) => {
+const productDeletedEvent = async (productId) => {
     // check if id is sold out or not 
     await producer.send({
         topic: kafkaTopics.PRODUCT_TOPIC.PRODUCT_DELETED,
         messages: [
             {
-                value: JSON.stringify(product.toJSON()),
-                key: product.id,
+                value: productId,
+                key: productId,
 
             }
         ]

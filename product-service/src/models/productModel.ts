@@ -1,6 +1,7 @@
 import { Document, HydratedDocument, model, Schema } from "mongoose";
 
-interface Product extends Document{
+export interface Product extends Document{
+    _id: string
     title: string,
     desc: string,
     brand: string
@@ -11,7 +12,7 @@ interface Product extends Document{
     avgRating: number 
     variant: {}
     isDiscounted: number
-    sellerId: number
+    sellerId: string
 
 }
 
@@ -26,7 +27,7 @@ const productSchema = new Schema<Product>({
     avgRating: { type: Number , required: true},
     variant: { type: Schema.Types.Mixed, default: {} , required: true},
     isDiscounted: { type: Number , required: true},
-    sellerId: { type: Number , required: true}
+    sellerId: { type: String , required: true}
     
 });
 

@@ -8,7 +8,7 @@ const getProducts = async (_req: Request, res:Response) => {
     try {
         // get product by id , seller id , catergory 
         //
-        const products = await Product.findOne()
+        const products = await Product.find()
         const { data , statusCode } = buildSuccessMessage(products);
         res.status(statusCode).json(data);
     } catch (error) {
@@ -19,13 +19,13 @@ const getProducts = async (_req: Request, res:Response) => {
 
 const addProduct = async (req: Request, res:Response) => {
     try {
-        const sellerId = req.user?.id // from req
+        const sellerId = req.user?.id
         await addProductSchema.validate({...req.body , sellerId});
         const product = buildProduct({...req.body , sellerId});
         const pr = await product.save()
         // pro added event topic 
         const { data , statusCode } = buildSuccessMessage(pr);
-        await productEvent.productAddedEvent(pr);
+        productEvent.productAddedEvent(pr);
         res.status(statusCode).json(data);
     } catch (error) {
         const {data , statusCode } = buildFailMessage(error);
@@ -50,7 +50,7 @@ const updateProduct = async (req: Request, res:Response) => {
             new: true
         })
         const { data , statusCode } = buildSuccessMessage(product);
-        await productEvent.productUpdatedEvent(product);
+        productEvent.productUpdatedEvent(product);
         res.status(statusCode).json(data);
     } catch (error) {
         const {data , statusCode } = buildFailMessage(error);
@@ -64,7 +64,7 @@ const deleteProduct = async (req: Request, res:Response) => {
         const { productId } = req.params;
         await Product.findByIdAndDelete(productId!)
         const { data , statusCode } = buildSuccessMessage([]);
-        await productEvent.productDeletedEvent(productId);
+        productEvent.productDeletedEvent(productId);
         res.status(statusCode).json(data);
     } catch (error) {
         const {data , statusCode } = buildFailMessage(error);

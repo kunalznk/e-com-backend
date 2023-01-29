@@ -1,0 +1,20 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: e-com-backend
+build:
+  local:
+    push: false
+  artifacts:
+  - image: kunalznk/e-com-auth
+    sync:
+      infer:
+        -  "\"src/**/*.ts\""
+    context: auth-service
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    remoteManifests:
+      - kafka/kafka.yaml
+

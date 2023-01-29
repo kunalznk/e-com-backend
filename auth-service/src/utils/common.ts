@@ -14,6 +14,7 @@ export const buildSuccessMessage = (resData : unknown) => {
 }
 
 export const buildFailMessage = (e : Error | unknown) => {
+let statusCode: number  = 200;
   console.log("Error", e)
   let error;
   if(e instanceof ValidationError) {
@@ -25,7 +26,8 @@ export const buildFailMessage = (e : Error | unknown) => {
     error = {
       path: e.stack,
       message: e.message
-    }
+    };
+    // statusCode = 401
   } else if (e instanceof UniqueConstraintError) {
     error = {
       path: e.fields,
@@ -38,14 +40,15 @@ export const buildFailMessage = (e : Error | unknown) => {
     }
   } else {
     error =  e;
+    // statusCode = 401;
   }
   return {
        data : { 
         status : "FAIL",
         message : e?.name,
         error
-    } ,
-    statusCode : 200
+    },
+    statusCode 
     }
 }
 

@@ -1,10 +1,10 @@
+require('dotenv').config()
 import jwt from "jsonwebtoken";
 
 const jwtOption : jwt.SignOptions = {
-    // algorithm: 'RS256',
     expiresIn: "1d",
-    issuer: "localhost",
-    audience: "http://localhost:3000"
+    issuer: process.env.DOMAIN,
+    audience: process.env.CLIENT
 }
 
 export default {

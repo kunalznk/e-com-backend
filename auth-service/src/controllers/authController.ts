@@ -70,7 +70,7 @@ export const signIn = async (req: Request, res: Response , ) => {
         if(!auth) {
             throw new Error("Invalid Credentials")
         }
-        const isValidPassword =  bcrypt.compare(password , auth?.password);
+        const isValidPassword =  await bcrypt.compare(password , auth?.password);
         if(!isValidPassword) {
             throw new Error("Invalid Credentials")
         }

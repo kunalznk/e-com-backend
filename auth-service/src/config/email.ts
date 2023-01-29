@@ -14,7 +14,7 @@ export const transport = createTransport({
 
 transport.verify((err, success) => {
     if(err) {
-        console.error(err)
+        console.error("SMTP Server failure")
     } else console.log("SMTP Server configured suceesfully" , success);
 })
 

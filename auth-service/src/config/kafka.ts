@@ -1,8 +1,10 @@
+require('dotenv').config()
 import { Consumer, Kafka, logLevel, Producer } from 'kafkajs';
 import { kafkaClients, kafkaTopics } from '../utils/constants';
+const { KAFKA_BROKER_1 } = process.env;
 
 const kafka = new Kafka({
-    brokers: ["127.0.0.1:9092"],
+    brokers: [KAFKA_BROKER_1!],
     clientId: kafkaClients.AUTH_CLIENT,
     logLevel: logLevel.ERROR
 })

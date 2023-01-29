@@ -1,4 +1,5 @@
-import * as yup from "yup";
+import * as yup  from "yup";
+import { InferType } from "yup"; 
 
 const firstName = yup.string().required().min(5).max(100);
 const lastName = yup.string().required().min(5).max(100);
@@ -19,18 +20,42 @@ const emailId = yup
   .min(5)
   .max(100);
 
-const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/).required("Plaese select role");
+  const phoneNumber = yup
+  .string()
+  .required("Please enter valid mobile number")
+  .min(10)
+  .max(10);  
 
+const role = yup.string().matches(/(CUSTOMER|SELLER|DELIVERY_PARTNER)/).required("Plaese select role");
 const token = yup.string().required()
+
+const addressLine1 = yup.string().required("Please Enter Valud Address").min(5).max(1000);
+const addressLine2 = yup.string().optional().min(5).max(1000);
+const city = yup.string().required("Please Enter City").min(5).max(250);
+const state = yup.string().required("Please Enter State").min(5).max(250);
+const pinCode = yup.string().required("Please Enter Pin Coed").min(5).max(10);
+const addressType = yup.string().required("Please Enter Type").min(5).max(250);
+const isDefault = yup.boolean().optional()
+
+export const address = yup.object({
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    pinCode,
+    addressType,
+    isDefault
+})
+
 
 export const CreateUserInputSchema = yup.object({
   firstName,
   lastName,
   emailId,
+  phoneNumber,
   password,
   role
 });
-
 
 export const LoginInputSchema = yup.object({
   emailId,
@@ -54,5 +79,13 @@ export const UpdatePasswordInputSchema = yup.object({
   }),
   newPassword: yup.string().required("Password dose not match")
 });
+
+export const UserSchema = CreateUserInputSchema.shape({
+  id: yup.number().required("please provide unique id")
+})
+export type User = InferType<typeof UserSchema> 
+
+
+
 
 

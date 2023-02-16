@@ -97,7 +97,8 @@ export const crateOrderSchema = yup.object({
 })
 
 export const deleteCartItemSchema = yup.object({
-   productId: yup.string().required("product is required"),
+  quantity: yup.number().optional(),
+   productId: yup.string().optional(),
    cartId: yup.string().required("cart is required"),
 })
 

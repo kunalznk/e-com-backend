@@ -12,7 +12,7 @@ import { buildFailMessage, buildSuccessMessage } from "../utils/common";
 import { crateOrderSchema } from "../utils/yup";
 import { ProductModel as Product } from "../models/productModel";
 import { CartModel as Cart} from "../models/cartModel";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { buildOrder, OrderModel as Order} from "../models/orderModel";
 import { ORDER_STATUS } from '../utils/constant';
 
@@ -48,12 +48,14 @@ const createOrder = async (req: Request , res: Response) => {
 
         if(productId && qty){
              productsToBuy = await Product.findOneAndUpdate({
-                id: productId,
-                qty: { $gte: qty}
+                _id: new Types.ObjectId(productId),
+                quantity: { $gte: qty}
              },
              {
-                $inc: {qty: qty * -1 }
-             })
+                $inc: {quantity: qty * -1 }
+                // if orderSuccess then only 
+             });
+             amount = productsToBuy.price.current_price;
         } else {
              productsToBuy = await Cart.findById(cartId, {
                 where: {
@@ -66,10 +68,9 @@ const createOrder = async (req: Request , res: Response) => {
                 
                 
                 productsToBuy = productsToBuy?.toJSON();
-                productsToBuy.products.forEach(({price , qty}) => {
-                    amount += price * qty;
+                productsToBuy?.products.forEach(({price: {current_price} , quantity}) => {
+                    amount += (current_price * quantity);
                 })
-                productsToBuy.price = amount;
             }
         }
 
@@ -85,7 +86,7 @@ const createOrder = async (req: Request , res: Response) => {
             key_secret: process.env.RAZORPAY_KEY_SECRET,
         });
         const order  = await rp.orders.create({
-            amount: productsToBuy?.price,
+            amount,
             currency: "INR",
             receipt,
             notes: {
@@ -149,10 +150,12 @@ const createOrder = async (req: Request , res: Response) => {
         // orderCreated event 
         if(amount > 0) {
             productsToBuy.products.forEach(async (product) => {
-                console.log(product);
-                const { _id , qty } = product;
+                const { _id , quantity } = product;
                 await Product.findByIdAndUpdate(_id , {
-                    $inc: { qty : qty * - 1}
+                    $inc: { quantity : quantity * - 1}
+                })
+                await Cart.findByIdAndUpdate(cartId, {
+                    status: ORDER_STATUS.WAITING_FOR_PAYMENT
                 })
             })
             orderEvent.orderCreated(_orderM);

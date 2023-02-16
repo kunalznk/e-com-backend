@@ -1,33 +1,65 @@
 import { Document, HydratedDocument, model, Schema } from "mongoose";
 
 export interface Product extends Document{
-    _id: string
-    title: string,
-    desc: string,
-    brand: string
-    category: {}
-    qty: number,
-    price: number,
-    images: [],
-    avgRating: number 
-    variant: {}
-    isDiscounted: number
-    sellerId: string
+    _id: string,
+    title: string, 
+    description: string,
+    categories: string[],
+    images: string[],
+    feature_bullets: string[],
+    item_available: boolean,
+    main_image: string,
+    product_information: string[],
+    reviews: {
+        total_reviews: number,
+        rating: number,
+        answered_questions: number
+    },
+    price: {
+        symbol: string,
+        currency: string,
+        current_price: number,
+        discounted: boolean,
+        before_price: number,
+        savings_amount: number,
+        savings_percent: number
+    },
+    total_images:number,
+    url: string,
+    variants: { } | undefined
+     quantity: number         
+            
 
 }
 
 const productSchema = new Schema<Product>({
     title: { type: String , required: true, unique: true},
-    desc: { type: String , required: true},
-    brand: { type: String , required: true},
-    category: { type: Schema.Types.Mixed, default: {}, required: true},
-    qty: { type: Number , required: true},
-    price: { type: Number , required: true},
-    images: { type: [] , required: true},
-    avgRating: { type: Number , required: true},
-    variant: { type: Schema.Types.Mixed, default: {} , required: true},
-    isDiscounted: { type: Number , required: true},
-    sellerId: { type: String , required: true}
+    description: { type: String },
+    categories: { type: [String] }, 
+    images:  { type: [String] }, 
+    feature_bullets:  { type: [String] }, 
+    item_available: { type: Boolean }, 
+    main_image: { type: String },
+    product_information:  { type: [String] }, 
+    reviews: {
+        total_reviews:  { type: Number }, 
+        rating: { type: Number }, 
+        answered_questions: { type: Number }, 
+    },
+    price: {
+        symbol: { type: String },
+        currency: { type: String },
+        current_price: { type: Number }, 
+        discounted: { type: Boolean }, 
+        before_price: { type: Number }, 
+        savings_amount: { type: Number }, 
+        savings_percent: { type: Number }, 
+    },
+    total_images:{ type: Number }, 
+    url: { type: String },
+     variants: { type: Schema.Types.Mixed, default: undefined},
+     quantity: { type: Number }
+    // sellerId: { type: String , required: true}
     
 });
 

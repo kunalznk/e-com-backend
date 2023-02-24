@@ -1,7 +1,0 @@
-FROM node:alpine
-
-WORKDIR /server
-
-EXPOSE 4000
-
-CMD ["npm" , "run" , "dev"]

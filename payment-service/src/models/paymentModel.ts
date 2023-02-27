@@ -3,12 +3,12 @@ import { ORDER_STATUS } from "../utils/constant";
 
 interface Product extends Document{
     _id: string,
-    qauntity: number
+    quantity: number
 }
 
 const productSchema = new Schema<Product>({
     _id: { type: String , required: true},
-    qauntity: { type: Number , required: true},
+    quantity: { type: Number , required: true},
 }, {
     _id: false
 });

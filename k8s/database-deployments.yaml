@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-depl
+spec:
+  selector:
+    matchLabels:
+      component: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: mysql
+    spec:
+      # volumes:
+      #   - name: mysql-volume
+      #     persistentVolumeClaim:
+      #       claimName: mysql-persistent-volume
+      containers:
+        - name: mysql-pod
+          image: mysql
+          imagePullPolicy: IfNotPresent
+          # resources:
+          #   requests:
+          #     memory: "64Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "128Mi"
+          #     cpu: "500m"
+          # volumeMounts:
+          #   - name: mysql-volume
+          #     mountPath: /var/lib/mysql/
+          #     subPath: mysql
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root@123"
+            - name: MYSQL_USER
+              value: "kunal"
+            - name: MYSQL_PASSWORD
+              value: "root@123"
+            - name: MYSQL_DATABASE
+              value: "auth"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-depl
+spec:
+  selector:
+    matchLabels:
+      component: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: mongo
+    spec:
+      # volumes:
+      #   - name: mysql-volume
+      #     persistentVolumeClaim:
+      #       claimName: mysql-persistent-volume
+      containers:
+        - name: mongo-pod
+          image: mongo
+          imagePullPolicy: IfNotPresent
+          # resources:
+          #   requests:
+          #     memory: "64Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "128Mi"
+          #     cpu: "500m"
+          # volumeMounts:
+          #   - name: mysql-volume
+          #     mountPath: /var/lib/mysql/
+          #     subPath: mysql
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "root@123"
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "kunal"

@@ -1,0 +1,159 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_USER: kunal
+      MYSQL_PASSWORD: root@123
+      MYSQL_DATABASE: auth
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+   
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: kunal
+      MONGO_INITDB_ROOT_PASSWORD: root@123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    depends_on:
+      - mysql
+
+
+  auth-service:
+    image: kunalznk/microservice:auth
+    ports:
+      - "3001:3001"
+    environment:
+      DOMAIN: localhost
+      CLIENT: http://localhost:3000
+      HTTP_PORT: 3001
+      HTTPS_PORT: 443
+      MYSQL_USER: kunal
+      MYSQL_HOST: mysql
+      MYSQL_PASSWORD: root@123
+      DATABASE: auth
+      DB_DIALECT: mysql
+      JWT_SECRET_KEY: dcndsjkvnsvn
+      KAFKA_BROKER_1: kafka-1:9092
+    depends_on:
+      - mysql
+      - kafka
+
+  user-service:
+    image: kunalznk/microservice:user
+    ports:
+      - "3002:3002"
+    environment:
+      DOMAIN: localhost
+      CLIENT: http://localhost:3000
+      HTTP_PORT: 3002
+      HTTPS_PORT: 443
+      MONGO_USER: kunal
+      MONGO_HOST: mongo
+      MONGO_PASSWORD: root%40123
+      MONGO_PORT: 27017
+      DATABASE: USER
+      PASS: ""
+      USER: ""
+      JWT_SECRET_KEY: dcndsjkvnsvn
+      KAFKA_BROKER_1: kafka-1:9092
+    depends_on:
+      - mongo
+      - kafka
+
+  product-service:
+    image: kunalznk/microservice:product
+    ports:
+      - "3003:3003"
+    environment:
+      DOMAIN: localhost
+      CLIENT: http://localhost:3000
+      HTTP_PORT: 3003
+      HTTPS_PORT: 443
+      MONGO_USER: kunal
+      MONGO_HOST: mongo
+      MONGO_PASSWORD: root%40123
+      MONGO_PORT: 27017
+      DATABASE: PRODUCT
+      PASS: ""
+      USER: ""
+      JWT_SECRET_KEY: dcndsjkvnsvn
+      KAFKA_BROKER_1: kafka-1:9092
+    depends_on:
+      - mongo
+      - kafka
+      
+  order-service:
+    image: kunalznk/microservice:order
+    ports:
+      - "3004:3004"
+    environment:
+      DOMAIN: localhost
+      CLIENT: http://localhost:3000
+      HTTP_PORT: 3004
+      HTTPS_PORT: 443
+      MONGO_USER: kunal
+      MONGO_HOST: mongo
+      MONGO_PASSWORD: root%40123
+      MONGO_PORT: 27017
+      DATABASE: ORDER
+      PASS: ""
+      USER: ""
+      JWT_SECRET_KEY: dcndsjkvnsvn
+      KAFKA_BROKER_1: kafka-1:9092
+    depends_on:
+      - mongo
+      - kafka
+      
+  payment-service:
+    image: kunalznk/microservice:payment
+    ports:
+      - "3005:3005"
+    environment:
+      DOMAIN: localhost
+      CLIENT: http://localhost:3000
+      HTTP_PORT: 3005
+      HTTPS_PORT: 443
+      MONGO_USER: kunal
+      MONGO_HOST: mongo
+      MONGO_PASSWORD: root%40123
+      MONGO_PORT: 27017
+      DATABASE: PAYMENT
+      PASS: ""
+      USER: ""
+      JWT_SECRET_KEY: dcndsjkvnsvn
+      KAFKA_BROKER_1: kafka-1:9092
+    depends_on:
+      - mongo
+      - kafka
+      
+  kafka-1:
+    image: doughgle/kafka-kraft
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      REPLICAS: '3'
+      SERVICE: kafka-svc
+      NAMESPACE: default
+      SHARE_DIR: /mnt/kafka
+      CLUSTER_ID: oh-sxaDRTcyAr6pFRbXyzA
+      DEFAULT_REPLICATION_FACTOR: '3'
+      DEFAULT_MIN_INSYNC_REPLICAS: '2'
+      hostname: kafka-1
+    volumes:
+      - kafka-data:/mnt/kafka
+    depends_on:
+      - mongo
+
+volumes:
+  mysql-data:
+  mongo-data:
+  kafka-data:
